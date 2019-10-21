@@ -1,6 +1,21 @@
 import tkinter as tk
 from tkinter import ttk, Entry
 
+import pandas as pd
+import numpy as np
+import math
+import json
+import yaml
+import operator
+
+from itertools import combinations
+from collections import Counter as ctr
+
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+from nltk.corpus import wordnet
+
 #import query_suggestions as qs
 #import candidateResources_ranking as crr
 #import snippets as snp
@@ -45,22 +60,19 @@ class StartPage(tk.Frame):
         tk.Frame.__init__(self, master)
 
         label = tk.Label(self, text="GoFind", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
+        label.grid(row=0, column=0, sticky="w")
 
-        self.entry_1 = Entry(self)
-        self.entry_1.pack()
+        self.entry = Entry(self)
+        self.entry.grid(row=1, column=0, ipadx=50, padx=.75)
 
         search_button = ttk.Button(self, text="Search", command=self.input_handler)#lambda: controller.show_frame(SearchPage))
-        search_button.pack()
+        search_button.grid(row=1, column=1, padx=10)
 
         #self.label2 = tk.Label(self)
         #self.label2.pack()
 
     def input_handler(self):
-        name = self.entry_1.get()
-        string_to_display = "Hello" + name
-        self.label2['text'] = string_to_display
-
+        query = self.entry.get()
 
 
 class SearchPage(tk.Frame):
