@@ -104,10 +104,10 @@ sessionDict = {}
 queryFreq = {}
 
 process_file(r'Clean-Data-01.txt')
-#process_file(r'Clean-Data-02.txt')
-#process_file(r'Clean-Data-03.txt')
-#process_file(r'Clean-Data-04.txt')
-#process_file(r'Clean-Data-05.txt')
+process_file(r'Clean-Data-02.txt')
+process_file(r'Clean-Data-03.txt')
+process_file(r'Clean-Data-04.txt')
+process_file(r'Clean-Data-05.txt')
 
 maxQueryFreq = max(queryFreq.values())
 
