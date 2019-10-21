@@ -1,6 +1,10 @@
 import tkinter as tk
 from tkinter import ttk, Entry
 
+#import query_suggestions as qs
+#import candidateResources_ranking as crr
+#import snippets as snp
+
 LARGE_FONT = ("Verdana", 12)
 
 #Inherits from tk.Tk
@@ -43,11 +47,21 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="GoFind", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        entry = Entry(self)
-        entry.pack()
+        self.entry_1 = Entry(self)
+        self.entry_1.pack()
 
-        search_button = ttk.Button(self, text="Search", command=lambda: controller.show_frame(SearchPage))
+        search_button = ttk.Button(self, text="Search", command=self.input_handler)#lambda: controller.show_frame(SearchPage))
         search_button.pack()
+
+        #self.label2 = tk.Label(self)
+        #self.label2.pack()
+
+    def input_handler(self):
+        name = self.entry_1.get()
+        string_to_display = "Hello" + name
+        self.label2['text'] = string_to_display
+
+
 
 class SearchPage(tk.Frame):
 
@@ -63,4 +77,5 @@ class SearchPage(tk.Frame):
         search_button.grid(row=1, column=1, padx=10)
 
 app = GoFind()
+app.geometry("1280x640")
 app.mainloop()
