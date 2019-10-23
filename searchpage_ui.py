@@ -17,7 +17,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import wordnet
 
 #import query_suggestions as qs
-#import candidateResources_ranking as crr
+import candidate_resources_ranking as crr
 #import snippets as snp
 
 LARGE_FONT = ("Verdana", 12)
@@ -51,9 +51,6 @@ class GoFind(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise()
 
-def placeholder(msg):
-    print(msg)
-
 class StartPage(tk.Frame):
 
     def __init__(self, master, controller):
@@ -69,10 +66,17 @@ class StartPage(tk.Frame):
         search_button.grid(row=1, column=1, padx=10)
 
         #self.label2 = tk.Label(self)
-        #self.label2.pack()
+        #self.label2.grid(row=2, column=0, padx=.75)
 
     def input_handler(self):
         query = self.entry.get()
+        cand_res = crr.get_candidate_resources(query)
+        top_three = crr.relevance_ranking(query, cand_res)
+        i = 1
+        #for docID in top_three:
+            #sentence = crr.snippet(docID, query)
+            #label = tk.Label(self, text=str(sentence[0]))
+            #label.grid(row=1+i, column=0)
 
 
 class SearchPage(tk.Frame):

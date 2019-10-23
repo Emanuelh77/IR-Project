@@ -1,21 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 import re
 import collections
-
-
-# In[ ]:
-
-
-
-
-
-# In[16]:
-
 
 def process_file(filepath):
     global current_session
