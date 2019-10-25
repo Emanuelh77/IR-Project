@@ -75,11 +75,6 @@ def score(query, cq, cqFreq):
     mod = queryToCq/len(sessionsWithQuery)
   
     return (freq + mod)/(1 - min(freq,mod))
-  
-
-
-# In[3]:
-
 
 current_session = 0
 session_Id = 0
@@ -96,9 +91,6 @@ process_file(r'Clean-Data-05.txt')
 maxQueryFreq = max(queryFreq.values())
 
 
-# In[26]:
-
-
 def suggest(q):
     qLen = len(re.findall(r'\w+', q))
     can_q = find_candidate_queries(q,qLen)
@@ -106,40 +98,6 @@ def suggest(q):
         return [x[0] for x in can_q]
     else:
         return [x[0] for x in can_q[0:3]]
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
 
 
 

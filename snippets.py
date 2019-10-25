@@ -76,7 +76,7 @@ def snippet (doc_id, q):
             c += q_v[i] * s_v[i]
         cosine.append(c / math.sqrt((math.pow(sum(q_v), 2)) * (math.pow(sum(s_v), 2))))
     cosine_df['sim'] = cosine
-    cosine_df = cosine_df.sort_values(by=['sim'], ascending =False).reset_index()
+    cosine_df = cosine_df.sort_values(by=['sim'], ascending=False).reset_index()
     sent_pos = list(cosine_df[0:3]['index'])
     
     #Put together the snippet as a list to return

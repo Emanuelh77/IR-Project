@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, Entry
+from tkinter import ttk, Button, Listbox, Entry
 
 import pandas as pd
 import numpy as np
@@ -17,8 +17,8 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import wordnet
 
 #import query_suggestions as qs
-import candidate_resources_ranking as crr
-#import snippets as snp
+#import candidate_resources_ranking as crr
+import suggestion
 
 LARGE_FONT = ("Verdana", 12)
 
@@ -59,7 +59,7 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="GoFind", font=LARGE_FONT)
         label.grid(row=0, column=0, sticky="w")
 
-        self.entry = Entry(self)
+        self.entry = Autocomplete(self)
         self.entry.grid(row=1, column=0, ipadx=50, padx=.75)
 
         search_button = ttk.Button(self, text="Search", command=self.input_handler)#lambda: controller.show_frame(SearchPage))
@@ -70,13 +70,46 @@ class StartPage(tk.Frame):
 
     def input_handler(self):
         query = self.entry.get()
-        cand_res = crr.get_candidate_resources(query)
-        top_three = crr.relevance_ranking(query, cand_res)
+        #cand_res = crr.get_candidate_resources(query)
+        #top_five = crr.relevance_ranking(query, cand_res)
         i = 1
-        #for docID in top_three:
-            #sentence = crr.snippet(docID, query)
-            #label = tk.Label(self, text=str(sentence[0]))
-            #label.grid(row=1+i, column=0)
+        #for docID in top_five:
+        #    label = tk.Label(self, text=str(docID))
+        #    label.grid(row=1+i, column=0)
+
+class Autocomplete(Entry):
+    def __init__(self, *args, **kwargs):
+        Entry.__init__(self, *args, **kwargs)
+        self.var = self["textvariable"]
+        if self.var == '':
+            self.var = self["textvariable"] = tk.StringVar()
+        self.lb_up = False
+        self.bind("<space>", self.changed)
+
+    def changed(self, args):
+        if self.var.get() == '':
+            self.lb.destroy()
+            self.lb_up = False
+        else:
+            words = self.comparison()
+            if words:
+                if not self.lb_up:
+                    self.lb = Listbox()
+                    self.lb.place(x=self.winfo_x(), y=self.winfo_y() + self.winfo_height())
+                    self.lb_up = True
+
+                #self.lb.delete(0, 'end')
+                for w in words:
+                    self.lb.insert('end', w)
+            else:
+                if self.lb_up:
+                    self.lb.destroy()
+                    self.lb_up = False
+
+    def comparison(self):
+        pattern = self.var.get()
+        return [sug for sug in suggestion.suggest(pattern)]
+
 
 
 class SearchPage(tk.Frame):
