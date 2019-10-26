@@ -6,6 +6,7 @@ import ast
 import yaml
 import operator
 
+from numba import jit, cuda
 from itertools import combinations
 from collections import Counter as ctr
 from nltk.tokenize import sent_tokenize
@@ -52,10 +53,25 @@ def get_candidate_resources(query):
         word_key_list.append(list(w_dict.keys()))
     CR.extend(set(word_key_list[0]).intersection(*word_key_list[1:]))
     if len(clean_query) == 2:
-        if len(CR)>50:
-            return CR[:50]
+        if len(CR)<50:
+            first_list = []
+            second_list = []
+            first_word = clean_query[0]
+            second_word = clean_query[1]
+            first_dict = yaml.load(index.loc[index.word == first_word, 'frequency'].item())
+            second_dict = yaml.load(index.loc[index.word == second_word, 'frequency'].item())
+            first_list.append(first_dict.keys())
+            second_list.append(second_dict.keys())
+            CR.extend(first_list)
+            CR.extend(second_list)
+            if len(set(CR))>50:
+                return CR[:50]
+            else: return set(CR)
         else:
-            return CR
+            if len(CR) > 50:
+                return CR[:50]
+            else:
+                return CR
     elif len(CR)<50:     #if the list of candidate resources is less than 50
         combs = combinations(clean_query, len(query)-1)     #use n-1 terms from the query
         for comb in list(combs):        #for combination in combinations
@@ -71,7 +87,7 @@ def get_candidate_resources(query):
                 CR = set(CR)[:49]
                 break
             else: break
-    return CR
+    return CR[:50]
 
 def idf(w):
     idf_value = idf_df.loc[idf_df.word==w, 'idf'].item()
@@ -104,6 +120,8 @@ def relevance_ranking(q, cand_resources):
     results = [i[0] for i in sorted_rel_docs[:5]]
     return results
 
+query = 'sven'
+r = get_candidate_resources(query)
 
 # Takes one document and creates a list containing the title a top 3 related sentence to a given clean query
 # def snippet(doc_id, q):
